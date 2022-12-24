@@ -1,3 +1,8 @@
 experiments.ipynb
 *.ddm
 *.tif
+convert.ipynb
+.DS_Store
+TOZER_ETAL_2019_SRTM15+_SUPPLEMENTS_GEOTIFF/*
+**/**.pyc
+data/SRTM15+V2.tiff
