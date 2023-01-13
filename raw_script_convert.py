@@ -104,7 +104,7 @@ def main(outputdir, inputdir, zoomlevel, start, end, quadsize):
     coordi = 0
     coordj = 0
 
-    demGrid = HgtFilesGrid(4, inputdir) # This does not work!!!!
+    demGrid = HgtFilesGrid(4, inputdir)  # This does not work!!!!
 
     for qm in range(quadsCount):
         if qm >= qm_start_in_grid and qm <= qm_end_in_grid:
@@ -137,6 +137,7 @@ def main(outputdir, inputdir, zoomlevel, start, end, quadsize):
 
                         # Since we don't have a demGrid, we'll just use a dummy value for the height
                         # NOT SURE IF THIS IS CORRECT
+
                         h00 = demGrid.GetHeight(
                             demFileIndex_i, demFileIndex_j, i00, j00
                         )

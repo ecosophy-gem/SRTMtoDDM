@@ -124,4 +124,4 @@ class HgtFilesGrid:
         self.filesCount = 0
 
     def GetHeight(self, iSquare, jSquare, i, j):
-        return [[0, 0], [0, 0]]
+        return [[0]]
