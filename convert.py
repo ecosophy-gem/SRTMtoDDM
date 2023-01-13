@@ -110,8 +110,9 @@ class STRM15toDDMConverter:
                 ele_bottom_right_lat,
             )
 
-            # Plot the tile in geo coordinates
-            plt.imshow(heights, cmap="terrain")
+            # # Plot the tile in geo coordinates
+            # plt.imshow(heights, cmap="terrain")
+            # plt.show()
 
             # Save the DDM file
             ddm_file = os.path.join(self.ddmoutputdir, f"ddm/{tile_name}.ddm")
@@ -124,14 +125,14 @@ class STRM15toDDMConverter:
 
             logger.info("DDM file saved", ddm_file=ddm_file)
 
-            # Save Numpy array
-            npy_file = os.path.join(self.ddmoutputdir, f"numpy/{tile_name}.npy")
-            # create the directory if it doesn't exist
-            os.makedirs(os.path.dirname(npy_file), exist_ok=True)
-            logger.info("Saving Numpy file", npy_file=npy_file)
-            np.save(npy_file, heights)
+            # # Save Numpy array
+            # npy_file = os.path.join(self.ddmoutputdir, f"numpy/{tile_name}.npy")
+            # # create the directory if it doesn't exist
+            # os.makedirs(os.path.dirname(npy_file), exist_ok=True)
+            # logger.info("Saving Numpy file", npy_file=npy_file)
+            # np.save(npy_file, heights)
 
-            logger.info("Numpy file saved", npy_file=npy_file)
+            # logger.info("Numpy file saved", npy_file=npy_file)
 
     def get_height_from_lat_long(
         self,
