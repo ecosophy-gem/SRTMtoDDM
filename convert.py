@@ -24,16 +24,16 @@ def tiley2lat(y: int, z: int) -> float:
     return 180.0 / PI * math.atan(0.5 * (math.exp(n) - math.exp(-n)))
 
 
-def GetHeight(strm15_ds):
+def GetHeight(srtm15_ds):
     """Get the height"""
-    dem = gdal.DEMProcessing("", strm15_ds, "hillshade", format="MEM")
+    dem = gdal.DEMProcessing("", srtm15_ds, "hillshade", format="MEM")
     dem_data = dem.ReadAsArray()
     return dem_data
 
 
-class STRM15toDDMConverter:
+class SRTM15toDDMConverter:
     """
-    Since STRM15plus is a GeoTIFF, we can use GDAL to convert it to a DDM file.
+    Since SRTM15plus is a GeoTIFF, we can use GDAL to convert it to a DDM file.
     We need to iterate over the GeoTIFF and convert each tile to a DDM file.
 
     First we need to get the tile coordinates for the zoom level we want.
@@ -44,23 +44,24 @@ class STRM15toDDMConverter:
     def __init__(
         self,
         zoom=6,
-        strm15file="data/SRTM15+V2.tiff",
+        srtm15file="data/SRTM15+V2.tiff",
         ddmoutputdir="data/SRTM15plus/converted",
     ):
 
         self.zoom = zoom
         self.ddmoutputdir = ddmoutputdir
-        self.strm15file = strm15file
+        self.srtm15file = srtm15file
         logger.info(
-            "STRM15toDDMConverter",
+            "SRTM15toDDMConverter",
             zoom=zoom,
-            strm15file=strm15file,
+            srtm15file=srtm15file,
             ddmoutputdir=ddmoutputdir,
         )
-        logger.info("Opening STRM15 GeoTIFF...")
-        self.ds = gdal.Open(self.strm15file)
-        self.strm15_data = self.ds.ReadAsArray()
-        logger.info("STRM15 GeoTIFF opened")
+        logger.info("Opening SRTM15 GeoTIFF...")
+        self.ds = gdal.Open(self.srtm15file)
+        #logger.info("Reading entire file...")
+        #self.srtm15_data = self.ds.ReadAsArray()
+        logger.info("SRTM15 GeoTIFF opened")
 
     def get_quad_coordinates(self):
         # we want the bounding box to be a square of size quadSize x quadSize
@@ -76,6 +77,7 @@ class STRM15toDDMConverter:
                         tiley2lat(y, self.zoom),
                         tilex2lon(x + 1, self.zoom),
                         tiley2lat(y + 1, self.zoom),
+                        x, y,
                     ]
                 )
         return tile_coordinates
@@ -98,8 +100,8 @@ class STRM15toDDMConverter:
                 ele_bottom_right_lat=ele_bottom_right_lat,
             )
 
-            x = int(ele_top_left_lat)
-            y = int(ele_top_left_lon)
+            x = ele[4]
+            y = ele[5]
             tile_name = f"{self.zoom}/{x}/{y}"
             logger.info("Tile name", tile_name=tile_name)
 
@@ -158,19 +160,19 @@ class STRM15toDDMConverter:
 
 @click.command()
 @click.option("--zoom", default=6, help="Zoom level")
-@click.option("--strm15file", default="data/SRTM15+V2.tiff", help="STRM15 file")
+@click.option("--srtm15file", default="data/SRTM15+V2.tiff", help="SRTM15 file")
 @click.option(
     "--ddmoutputdir", default="data/SRTM15plus/converted", help="Output directory"
 )
 def main(
     zoom,
-    strm15file,
+    srtm15file,
     ddmoutputdir,
 ):
     logger.info("Starting conversion")
-    converter = STRM15toDDMConverter(
+    converter = SRTM15toDDMConverter(
         zoom=zoom,
-        strm15file=strm15file,
+        srtm15file=srtm15file,
         ddmoutputdir=ddmoutputdir,
     )
     converter.process()
